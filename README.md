@@ -30,33 +30,34 @@ pip install numpy matplotlib torch kornia opencv-python
 
 ## Project Tasks
 
-### **Step 1: Preprocess Images**
+### **Step 1: Preprocessing**
 
-- Convert images to grayscale.
-- Normalize intensity values to the range **[0,1]**.
+- Convert input images to **grayscale** and normalize pixel values to **[0,1]**.
 
-### **Step 2: Compute Spatial and Temporal Derivatives**
+### **Step 2: Computing Spatial and Temporal Derivatives**
 
 - Compute **Ix** and **Iy** using a **central differences filter**.
-- Compute **It** by subtracting the first image from the second.
+- Compute **It** by applying a **Gaussian blur** to both images and subtracting the first from the second.
 
-### **Step 3: Estimate Optical Flow**
+### **Step 3: Estimating Optical Flow**
 
-- Construct the **2×2 structure tensor matrix** for each pixel.
-- Solve the **Lucas-Kanade equation** using matrix inversion.
-- Apply a threshold to determine reliable flow values.
+- Initialize **u, v**, and **binary flow map**.
+- Extract a **local gradient window** centered at each pixel.
+- Compute **IxIx, IyIy, IxIy, IxIt, IyIt** over the window.
+- Construct the **structure tensor matrix (ATA)** and solve for **(u, v)** using the **pseudoinverse**.
+- Apply a threshold to ensure flow stability based on **eigenvalues of ATA**.
 
-### **Step 4: Visualize Optical Flow**
+### **Step 4: Visualizing Optical Flow**
 
-- Generate and display **horizontal (u) and vertical (v) flow components**.
-- Create a **binary mask** indicating valid flow regions.
+- Display **horizontal (u) and vertical (v) flow components**.
+- Generate a **binary map** indicating valid flow regions.
 - Use **flowToColor** to visualize flow direction and magnitude.
 
 ## Visualizations
 
 - **Binary Flow Mask:** Display regions where motion is detected.
-- **Optical Flow Maps:** Show horizontal and vertical flow components.
 
+- **Optical Flow Maps:** Show horizontal and vertical flow components.
 
 - **Thresholding Effects:** Show variations in flow detection based on parameter tuning.
 
